@@ -70,7 +70,6 @@ export const LoginForm = () => {
         setErrorMsg(t(AUTH_KEYS.UNEXPECTED_ERROR));
       }
     } else if (result?.success) {
-      // 4. ¡Ahora sí funciona! Guardamos en Zustand
       const mockUserBackendPayload: UserProfile = {
         name: "Pepes",
         lastName: "domain",
@@ -78,11 +77,15 @@ export const LoginForm = () => {
         profilePicture:
           "https://api.dicebear.com/7.x/avataaars/svg?seed=DemoABI",
         mainColor: "#FFC043",
+        permissions: [
+          "viewDashboardModule",
+          "viewUsersModule",
+          "viewPermissionsModule",
+        ],
       };
 
       setUser(mockUserBackendPayload);
 
-      // 5. Y redirigimos nosotros mismos de forma suave
       router.push(ROUTES.HOME);
     }
   };

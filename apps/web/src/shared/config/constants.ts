@@ -1,9 +1,12 @@
 // apps/web/src/shared/config/constants.ts
 
+// apps/web/src/shared/config/constants.ts
 export const ROUTES = {
-  HOME: "/",
+  HOME: "/dashboard", // <-- Actualizado
   LOGIN: "/login",
+  USERS: "/users",
 } as const;
+
 export const LANGUAGES = {
   ES: "es",
   EN: "en",

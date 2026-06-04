@@ -14,6 +14,9 @@
     "unexpectedError": "An unexpected error occurred."
   },
   "Navigation": {
-    "switchLanguage": "Switch to Spanish"
+    "switchLanguage": "Switch to Spanish",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "permissions": "Config"
   }
 }

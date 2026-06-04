@@ -7,7 +7,8 @@ export interface UserProfile {
   lastName: string;
   email: string;
   profilePicture: string;
-  mainColor: string; // Tu color personalizado devuelto por el backend
+  mainColor: string;
+  permissions: string[];
 }
 
 // 2. Definimos el estado global de la sesión

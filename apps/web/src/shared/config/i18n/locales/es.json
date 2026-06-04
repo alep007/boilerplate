@@ -14,6 +14,9 @@
     "unexpectedError": "Ocurrió un error inesperado."
   },
   "Navigation": {
-    "switchLanguage": "Cambiar a Inglés"
+    "switchLanguage": "Cambiar a Inglés",
+    "dashboard": "Ver Dashboard",
+    "users": "Usuarios",
+    "permissions": "Configuración"
   }
 }

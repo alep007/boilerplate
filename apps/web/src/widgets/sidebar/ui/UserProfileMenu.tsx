@@ -6,18 +6,18 @@ import { useStyletron } from "baseui";
 import { Avatar } from "baseui/avatar";
 import { LabelSmall, ParagraphXSmall } from "baseui/typography";
 import { StatefulPopover, PLACEMENT } from "baseui/popover";
-import { Button, KIND, SHAPE } from "baseui/button";
-import { Overflow } from "baseui/icon";
+import { Overflow } from "baseui/icon"; // Ya no importamos Button de baseui/button
 
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { handleSignOut } from "@/features/auth/model/actions";
 import { ThemeContext } from "@/app/[locale]/StyletronProvider";
-import { useUserStore } from "@/entities/user/model/store"; // <-- Importamos Zustand
+import { useUserStore } from "@/entities/user/model/store";
 
 export const UserProfileMenu = () => {
   const [css, theme] = useStyletron();
 
+  // Extraemos Zustand de forma optimizada
   const user = useUserStore((state) => state.user);
   const clearSession = useUserStore((state) => state.clearSession);
 
@@ -68,6 +68,12 @@ export const UserProfileMenu = () => {
     <StatefulPopover
       placement={PLACEMENT.topRight}
       popoverMargin={8}
+      // SOLUCIÓN 1: Forzamos al Popover a renderizarse POR ENCIMA del Sidebar (que tiene 100)
+      overrides={{
+        Body: {
+          style: { zIndex: 105 },
+        },
+      }}
       content={({ close }) => (
         <div
           className={css({
@@ -106,7 +112,7 @@ export const UserProfileMenu = () => {
             label="Cerrar Sesión"
             isDestructive
             onClick={() => {
-              clearSession(); // 2. Limpiamos Zustand antes de salir
+              clearSession();
               handleSignOut();
               close();
             }}
@@ -114,11 +120,11 @@ export const UserProfileMenu = () => {
         </div>
       )}
     >
+      {/* Contenedor principal que gatilla el Popover al hacer clic en cualquier parte de él */}
       <div
         className={css({
           display: "flex",
           alignItems: "center",
-          justifyBox: "space-between",
           justifyContent: "space-between",
           padding: "12px",
           borderRadius: "8px",
@@ -135,7 +141,6 @@ export const UserProfileMenu = () => {
         >
           <Avatar name={userName} size="36px" src={userAvatar} />
           <div className={css({ display: "flex", flexDirection: "column" })}>
-            {/* 3. El nombre y apellido cambian dinámicamente aquí */}
             <LabelSmall color={theme.colors.contentInversePrimary}>
               {userName}
             </LabelSmall>
@@ -148,18 +153,24 @@ export const UserProfileMenu = () => {
           </div>
         </div>
 
-        <Button
-          kind={KIND.tertiary}
-          shape={SHAPE.circle}
-          size="compact"
-          overrides={{
-            BaseButton: {
-              style: { color: theme.colors.contentInversePrimary },
+        {/* SOLUCIÓN 2: Reemplazamos el <Button> de Base Web por un <div> normal estilizado.
+            Esto permite que el clic traspase ("bubble up") hacia el StatefulPopover sin ser bloqueado. */}
+        <div
+          className={css({
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            color: theme.colors.contentInversePrimary,
+            ":hover": {
+              backgroundColor: "rgba(255,255,255, 0.1)", // Hover sutil nativo
             },
-          }}
+          })}
         >
           <Overflow size={24} />
-        </Button>
+        </div>
       </div>
     </StatefulPopover>
   );
