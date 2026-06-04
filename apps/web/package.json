@@ -11,17 +11,26 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/forms": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.101.0",
+    "baseui": "^16.1.1",
     "next": "16.2.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "styletron-engine-atomic": "^1.6.2",
+    "styletron-react": "^6.1.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tanstack/react-query-devtools": "^5.101.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
+    "@types/styletron-engine-atomic": "^1.1.4",
+    "@types/styletron-react": "^5.0.8",
+    "@types/styletron-standard": "^2.0.6",
     "eslint": "^9.39.1",
     "typescript": "5.9.2"
   }
