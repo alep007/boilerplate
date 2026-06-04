@@ -5,10 +5,11 @@ import React from "react";
 import FormRenderer, {
   FormRendererProps,
 } from "@data-driven-forms/react-form-renderer/form-renderer";
+// 1. Importamos useFormApi
+import { useFormApi } from "@data-driven-forms/react-form-renderer";
 import { componentMapper } from "./mapper";
 import { Button } from "@repo/ui";
 
-// Interfaz para extender las propiedades base
 export interface DeclarativeFormProps extends Omit<
   FormRendererProps,
   "componentMapper" | "FormTemplate"
@@ -17,16 +18,18 @@ export interface DeclarativeFormProps extends Omit<
   isLoading?: boolean;
 }
 
-// Un FormTemplate básico para envolver los campos y colocar el botón de envío
-const FormTemplate = ({ formFields, schema }: any) => {
+const FormTemplate = ({ formFields }: any) => {
+  // 2. Extraemos el handleSubmit de la API interna del formulario
+  const { handleSubmit } = useFormApi();
+
   return (
-    <form style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    // 3. Conectamos el evento al formulario HTML
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+    >
       {formFields}
-      <Button type="submit">
-        {/* Aquí podríamos pasar la prop submitLabel mediante un contexto,
-            pero por ahora lo dejamos por defecto */}
-        Enviar
-      </Button>
+      <Button type="submit">Enviar</Button>
     </form>
   );
 };

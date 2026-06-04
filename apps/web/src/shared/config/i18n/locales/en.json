@@ -1,0 +1,19 @@
+{
+  "Auth": {
+    "title": "Sign In",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "example@email.com",
+    "emailRequired": "Email is required",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "passwordRequired": "Password is required",
+    "rememberMe": "Remember me",
+    "submitButton": "Login",
+    "logoutButton": "Sign Out",
+    "invalidCredentials": "Invalid credentials.",
+    "unexpectedError": "An unexpected error occurred."
+  },
+  "Navigation": {
+    "switchLanguage": "Switch to Spanish"
+  }
+}

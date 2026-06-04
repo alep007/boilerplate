@@ -1,0 +1,19 @@
+{
+  "Auth": {
+    "title": "Iniciar sesión",
+    "emailLabel": "Correo Electrónico",
+    "emailPlaceholder": "ejemplo@correo.com",
+    "emailRequired": "El correo es obligatorio",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "passwordRequired": "La contraseña es obligatoria",
+    "rememberMe": "Recordar mi sesión",
+    "submitButton": "Ingresar",
+    "logoutButton": "Cerrar Sesión",
+    "invalidCredentials": "Las credenciales son inválidas.",
+    "unexpectedError": "Ocurrió un error inesperado."
+  },
+  "Navigation": {
+    "switchLanguage": "Cambiar a Inglés"
+  }
+}

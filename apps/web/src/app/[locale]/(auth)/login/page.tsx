@@ -1,6 +1,13 @@
+// NO necesitas "use client" aquí
+
 import { LoginForm } from "@/features/auth/ui/LoginForm";
+import { useTranslations } from "next-intl";
+import { I18N_NAMESPACES } from "@/shared/config/constants";
 
 export default function LoginPage() {
+  // Inicializamos las traducciones usando tu namespace centralizado
+  const t = useTranslations(I18N_NAMESPACES.AUTH);
+
   return (
     <div
       style={{
@@ -22,8 +29,10 @@ export default function LoginPage() {
         }}
       >
         <h2 style={{ margin: "0 0 16px 0", fontFamily: "sans-serif" }}>
-          Iniciar Sesion
+          {/* Usamos la llave 'title' que ya tienes en tu JSON */}
+          {t("title")}
         </h2>
+
         <LoginForm />
       </div>
     </div>

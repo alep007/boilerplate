@@ -1,10 +1,10 @@
-// apps/web/app/StyletronProvider.tsx
+// apps/web/src/app/[locale]/StyletronProvider.tsx
 "use client";
 
 import { useState } from "react";
 import { useServerInsertedHTML } from "next/navigation";
-import { Server, Client } from "styletron-engine-atomic";
 import { Provider as StyletronReactProvider } from "styletron-react";
+import { Client, Server } from "styletron-engine-atomic";
 import { LightTheme, BaseProvider } from "baseui";
 
 export default function StyletronProvider({
@@ -12,14 +12,18 @@ export default function StyletronProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [engine] = useState(() =>
-    typeof window === "undefined" ? new Server() : new Client(),
-  );
+  // Aseguramos que el motor sea una instancia única por sesión de usuario
+  const [engine] = useState(() => {
+    if (typeof window === "undefined") {
+      return new Server();
+    }
+    return new Client();
+  });
 
+  // Inyectamos los estilos en el HTML del servidor antes de enviarlo al cliente
   useServerInsertedHTML(() => {
     if (typeof window === "undefined") {
-      const serverEngine = engine as Server;
-      const stylesheets = serverEngine.getStylesheets();
+      const stylesheets = (engine as Server).getStylesheets() || [];
       return (
         <>
           {stylesheets.map((sheet, i) => (
@@ -38,6 +42,7 @@ export default function StyletronProvider({
 
   return (
     <StyletronReactProvider value={engine}>
+      {/* BaseProvider es OBLIGATORIO para que los inputs y botones tengan estilo */}
       <BaseProvider theme={LightTheme}>{children}</BaseProvider>
     </StyletronReactProvider>
   );
