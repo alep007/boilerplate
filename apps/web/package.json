@@ -21,7 +21,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "styletron-engine-atomic": "^1.6.2",
-    "styletron-react": "^6.1.1"
+    "styletron-react": "^6.1.1",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

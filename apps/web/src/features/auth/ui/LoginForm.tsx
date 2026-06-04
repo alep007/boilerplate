@@ -2,22 +2,29 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation"; // <-- 1. Importamos el router del cliente
 import { DeclarativeForm, componentTypes } from "@repo/forms";
 import { useTranslations } from "next-intl";
 import { authenticate } from "../model/actions";
+import { useUserStore, UserProfile } from "@/entities/user/model/store";
 import {
   I18N_NAMESPACES,
   AUTH_KEYS,
   AUTH_ERRORS,
-} from "@/shared/config/constants"; // <-- Importamos
+  ROUTES,
+} from "@/shared/config/constants";
 
 export const LoginForm = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  // Usamos el namespace centralizado
+  const router = useRouter();
   const t = useTranslations(I18N_NAMESPACES.AUTH);
+
+  // Extraemos la acción de Zustand para guardar el usuario
+  const setUser = useUserStore((state) => state.setUser);
 
   const loginSchema = useMemo(
     () => ({
+      // ... tu schema intacto ...
       fields: [
         {
           component: componentTypes.TEXT_FIELD,
@@ -53,15 +60,30 @@ export const LoginForm = () => {
 
   const handleLoginSubmit = async (values: Record<string, any>) => {
     setErrorMsg(null);
-    const errorCode = await authenticate(values);
+    const result = await authenticate(values);
 
-    if (errorCode) {
-      // Comparamos usando las constantes del sistema
-      if (errorCode === AUTH_ERRORS.INVALID_CREDENTIALS) {
+    // 3. Evaluamos la nueva respuesta del servidor
+    if (result?.error) {
+      if (result.error === AUTH_ERRORS.INVALID_CREDENTIALS) {
         setErrorMsg(t(AUTH_KEYS.INVALID_CREDENTIALS));
       } else {
         setErrorMsg(t(AUTH_KEYS.UNEXPECTED_ERROR));
       }
+    } else if (result?.success) {
+      // 4. ¡Ahora sí funciona! Guardamos en Zustand
+      const mockUserBackendPayload: UserProfile = {
+        name: "Pepes",
+        lastName: "domain",
+        email: values.email,
+        profilePicture:
+          "https://api.dicebear.com/7.x/avataaars/svg?seed=DemoABI",
+        mainColor: "#FFC043",
+      };
+
+      setUser(mockUserBackendPayload);
+
+      // 5. Y redirigimos nosotros mismos de forma suave
+      router.push(ROUTES.HOME);
     }
   };
 

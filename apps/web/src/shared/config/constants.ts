@@ -9,6 +9,11 @@ export const LANGUAGES = {
   EN: "en",
 } as const;
 
+export const THEME_MODES = {
+  LIGHT: "light",
+  DARK: "dark",
+} as const;
+
 export const AUTH_ERRORS = {
   INVALID_CREDENTIALS: "CredentialsSignin",
   UNEXPECTED: "UnexpectedError",

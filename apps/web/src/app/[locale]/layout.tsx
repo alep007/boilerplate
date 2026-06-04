@@ -1,9 +1,17 @@
 // apps/web/src/app/[locale]/layout.tsx
 import type { Metadata } from "next";
+import { Neuton } from "next/font/google"; // 1. Importamos la fuente
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import StyletronProvider from "./StyletronProvider";
 import QueryProvider from "./QueryProvider";
+
+// 2. Configuramos la fuente
+const neuton = Neuton({
+  weight: ["300", "400", "700"], // Pesos para Mensajes, Subtítulos y Títulos
+  subsets: ["latin"],
+  variable: "--font-neuton", // Esta es la variable que pusimos en theme.ts
+});
 
 export const metadata: Metadata = {
   title: "Boilerplate App",
@@ -11,20 +19,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params, // Ya no desestructuramos aquí
+  params,
 }: {
   children: React.ReactNode;
-  // Tipamos params explícitamente como una Promesa
   params: Promise<{ locale: string }>;
 }) {
-  // 1. Resolvemos la promesa para obtener el locale
   const { locale } = await params;
-
-  // 2. Obtenemos los diccionarios de traducción
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    // 3. Inyectamos la clase de la variable en el HTML
+    <html lang={locale} className={neuton.variable}>
       <body style={{ margin: 0, padding: 0 }}>
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>

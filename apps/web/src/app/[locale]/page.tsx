@@ -1,5 +1,13 @@
 // apps/web/src/app/[locale]/page.tsx
+"use client"; // <-- ¡Esta es la llave mágica!
+
+import {
+  HeadingLarge,
+  HeadingMedium,
+  ParagraphMedium,
+} from "baseui/typography";
 import { Sidebar } from "@/widgets/sidebar/ui/Sidebar";
+import { Button } from "@repo/ui";
 
 export default function DashboardPage() {
   return (
@@ -10,25 +18,23 @@ export default function DashboardPage() {
         backgroundColor: "#f5f5f7",
       }}
     >
-      {/* Inyectamos el Widget global */}
       <Sidebar />
 
-      {/* Contenedor del contenido principal con un margen izquierdo igual al ancho del sidebar */}
       <main
         style={{
           flex: 1,
           marginLeft: "260px",
           padding: "40px",
-          fontFamily: "sans-serif",
         }}
       >
-        <h1 style={{ margin: "0 0 8px 0", color: "#141414" }}>
-          Dashboard Principal
-        </h1>
-        <p style={{ color: "#545454" }}>
-          El sistema de diseño atómico y la arquitectura FSD están operando de
-          manera integrada.
-        </p>
+        {/* Ahora estos componentes pueden acceder al Contexto del Tema */}
+        <HeadingLarge>Este es un Título con Neuton Bold</HeadingLarge>
+        <HeadingMedium>Este es un Subtítulo con Neuton Regular</HeadingMedium>
+        <ParagraphMedium>
+          Este es un mensaje base con Neuton Light, siguiendo las reglas
+          establecidas en FSD.
+        </ParagraphMedium>
+        <Button>Enviar</Button>
       </main>
     </div>
   );

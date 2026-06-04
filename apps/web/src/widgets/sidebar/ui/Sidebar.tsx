@@ -2,17 +2,20 @@
 "use client";
 
 import React from "react";
-import { LanguageSwitcher } from "@/features/i18n/ui/LanguageSwitcher";
-import { LogoutButton } from "@/features/auth/ui/LogoutButton";
+import { useStyletron } from "baseui";
+import { HeadingSmall, LabelLarge } from "baseui/typography";
+import { UserProfileMenu } from "./UserProfileMenu"; // <-- Importamos nuestro nuevo Widget
 
 export const Sidebar = () => {
+  const [css, theme] = useStyletron();
+
   return (
     <aside
-      style={{
+      className={css({
         width: "260px",
         height: "100vh",
-        backgroundColor: "#141414",
-        color: "#ffffff",
+        backgroundColor: theme.colors.backgroundInversePrimary,
+        color: theme.colors.contentInversePrimary,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -21,54 +24,50 @@ export const Sidebar = () => {
         position: "fixed",
         left: 0,
         top: 0,
-        borderRight: "1px solid #242424",
-      }}
+        borderRight: `1px solid ${theme.colors.borderOpaque}`,
+      })}
     >
-      {/* Sección Superior: Logo y Enlaces de Navegación */}
       <div>
-        <div
-          style={{
-            fontSize: "20px",
-            fontWeight: "bold",
+        <HeadingSmall
+          className={css({
             marginBottom: "32px",
-            fontFamily: "sans-serif",
-            color: "#276EF1",
+            color: theme.colors.buttonPrimaryFill,
             paddingLeft: "8px",
-          }}
+            marginTop: 0,
+          })}
         >
           Control Panel
-        </div>
+        </HeadingSmall>
 
-        <nav style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <nav
+          className={css({
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          })}
+        >
           <div
-            style={{
+            className={css({
               padding: "12px",
               borderRadius: "8px",
-              backgroundColor: "#242424",
-              fontFamily: "sans-serif",
+              backgroundColor: theme.colors.backgroundTertiary,
               cursor: "pointer",
-              fontWeight: 500,
-            }}
+            })}
           >
-            Dashboard
+            <LabelLarge>Dashboard</LabelLarge>
           </div>
-          {/* Aquí añadirás más moléculas de navegación en el futuro */}
         </nav>
       </div>
 
-      {/* Sección Inferior: Características (Features) de Configuración */}
+      {/* Sección Inferior: El Perfil y el Menú */}
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
+        className={css({
           width: "100%",
-          borderTop: "1px solid #242424",
+          borderTop: `1px solid ${theme.colors.borderOpaque}`,
           paddingTop: "16px",
-        }}
+        })}
       >
-        <LanguageSwitcher />
-        <LogoutButton />
+        <UserProfileMenu />
       </div>
     </aside>
   );
