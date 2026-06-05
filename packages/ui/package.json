@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "baseui": "latest",
-    "styletron-react": "latest"
+    "styletron-react": "latest",
+    "date-fns": "latest"
   },
   "devDependencies": {
     "@types/react": "19.2.2",
