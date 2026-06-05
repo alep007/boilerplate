@@ -9,6 +9,7 @@
 .claude
 docs
 task
+skills-lock.json
 
 # testing
 /coverage
