@@ -5,7 +5,7 @@ import { useState, createContext, useMemo } from "react";
 import { useServerInsertedHTML } from "next/navigation";
 import { Provider as StyletronReactProvider } from "styletron-react";
 import { Client, Server } from "styletron-engine-atomic";
-import { BaseProvider } from "baseui";
+import { BaseProvider, Theme } from "baseui";
 import { CustomLightTheme, CustomDarkTheme } from "@/shared/config/theme";
 import { useUserStore } from "@/entities/user/model/store"; // 1. Importamos tu store de Zustand
 
@@ -70,7 +70,7 @@ export default function StyletronProvider({
         buttonPrimaryHover: mainColor, // Podrías aplicar una función de oscurecimiento aquí si lo deseas
         buttonPrimaryActive: mainColor,
       },
-    };
+    } as Theme;
   }, [baseTheme, mainColor]);
 
   return (

@@ -84,6 +84,7 @@ export function ProductionStepper({ currentStatus }: Props) {
                   whiteSpace: "nowrap",
                 })}
               >
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {t(config.labelKey as any)}
               </span>
             </div>

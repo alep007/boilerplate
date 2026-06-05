@@ -37,6 +37,7 @@ export function PaymentSummary({ order }: Props) {
         ${order.price_total.toFixed(2)}
       </HeadingMedium>
 
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <Badge label={t(payConfig.labelKey as any)} variant={payConfig.variant} />
 
       {order.payment_status === "partial" && order.payment_advance != null && (

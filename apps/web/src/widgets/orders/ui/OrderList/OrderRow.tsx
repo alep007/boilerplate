@@ -60,9 +60,11 @@ export function OrderRow({ order, onClick }: Props) {
         {deliveryDate}
       </td>
       <td className={css({ padding: "12px 16px" })}>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <Badge label={t(prodConfig.labelKey as any)} variant={prodConfig.variant} />
       </td>
       <td className={css({ padding: "12px 16px" })}>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <Badge label={t(payConfig.labelKey as any)} variant={payConfig.variant} />
       </td>
     </tr>

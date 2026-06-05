@@ -27,6 +27,7 @@ export function StageAdvanceButton({ orderId, currentStatus, paymentStatus }: Pr
   if (isLast) return null;
 
   const nextStage = PRODUCTION_STAGES[currentIndex + 1] as ProductionStatus;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const nextLabel = t(PRODUCTION_STATUS_CONFIG[nextStage].labelKey as any);
   const isAdvancingToDelivered = nextStage === "delivered";
 

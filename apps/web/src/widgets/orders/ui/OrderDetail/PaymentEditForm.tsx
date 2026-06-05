@@ -2,7 +2,7 @@
 
 import { useStyletron } from "baseui";
 import { useTranslations } from "next-intl";
-import { LabelMedium, LabelSmall } from "baseui/typography";
+import { LabelSmall } from "baseui/typography";
 import { Input } from "@repo/ui";
 import { PaymentStatus } from "@/entities/order/model/types";
 import { PAYMENT_STATUS_CONFIG } from "../shared/statusConfig";
@@ -76,6 +76,7 @@ export function PaymentEditForm({
                   fontWeight: isActive ? "600" : "400",
                 })}
               >
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {t(config.labelKey as any)}
               </button>
             );

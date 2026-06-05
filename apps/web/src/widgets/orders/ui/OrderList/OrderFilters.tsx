@@ -50,6 +50,7 @@ export function OrderFilters({ active, onChange }: Props) {
               },
             })}
           >
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {t(labelKey as any)}
           </button>
         );

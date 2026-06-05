@@ -46,6 +46,7 @@ export function OrderForm({
     <div className={css({ display: "flex", flexDirection: "column", gap: "24px" })}>
       <DeclarativeForm
         schema={schema}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onSubmit={onSubmit as any}
         initialValues={initialValues}
       />
