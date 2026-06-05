@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@data-driven-forms/react-form-renderer": "^3.22.0",
-    "@repo/ui": "workspace:*"
+    "@repo/ui": "workspace:*",
+    "baseui": "latest"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
