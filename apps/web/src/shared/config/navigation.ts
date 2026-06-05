@@ -1,12 +1,12 @@
-// apps/web/src/shared/config/navigation.ts
-import { LayoutDashboard, Users, ShieldAlert } from "lucide-react"; // O los iconos de tu preferencia
+import { LayoutDashboard, Users, ShieldAlert, ClipboardList } from "lucide-react";
+import React from "react";
 
 export type NavItem = {
   id: string;
   path: string;
-  labelKey: string; // La llave de next-intl (ej. 'Navigation.dashboard')
+  labelKey: string;
   icon: React.ElementType;
-  requiredPermission: string; // El permiso RBAC necesario para verlo
+  requiredPermission: string;
 };
 
 export const NAVIGATION_CONFIG: NavItem[] = [
@@ -16,6 +16,13 @@ export const NAVIGATION_CONFIG: NavItem[] = [
     labelKey: "dashboard",
     icon: LayoutDashboard,
     requiredPermission: "viewDashboardModule",
+  },
+  {
+    id: "orders",
+    path: "/orders",
+    labelKey: "orders",
+    icon: ClipboardList,
+    requiredPermission: "viewOrdersModule",
   },
   {
     id: "users",

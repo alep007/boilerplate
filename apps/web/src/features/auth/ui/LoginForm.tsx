@@ -81,6 +81,7 @@ export const LoginForm = () => {
           "viewDashboardModule",
           "viewUsersModule",
           "viewPermissionsModule",
+          "viewOrdersModule",
         ],
       };
 
