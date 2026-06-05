@@ -1,57 +1,47 @@
-// apps/web/src/shared/ui/CustomSelect.tsx
 "use client";
 
-import React from "react";
-import { Select, TYPE, Value } from "baseui/select";
+import { Select as BaseSelect, TYPE, Value } from "baseui/select";
 
-interface Option {
+export interface SelectOption {
   id: string | number;
   label: string;
 }
 
-interface CustomSelectProps {
-  options: Option[];
+export interface SelectProps {
+  options: SelectOption[];
   value: Value;
   onChange: (params: { value: Value }) => void;
   placeholder?: string;
   disabled?: boolean;
+  error?: boolean;
 }
 
-export const CustomSelect = ({
+export function Select({
   options,
   value,
   onChange,
   placeholder,
   disabled,
-}: CustomSelectProps) => {
+  error,
+}: SelectProps) {
   return (
-    <Select
+    <BaseSelect
       options={options}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      type={TYPE.search} // Habilita el comportamiento de búsqueda
-      labelKey="label" // Mapeo de la propiedad visual
-      valueKey="id" // Mapeo del identificador único
+      type={TYPE.search}
+      labelKey="label"
+      valueKey="id"
       overrides={{
         ControlContainer: {
           style: ({ $theme }) => ({
             borderRadius: "8px",
-            fontFamily: "var(--font-neuton), serif",
+            borderColor: error ? $theme.colors.borderNegative : undefined,
           }),
-        },
-        ValueContainer: {
-          style: {
-            fontFamily: "var(--font-neuton), serif",
-          },
-        },
-        DropdownListItem: {
-          style: {
-            fontFamily: "var(--font-neuton), serif",
-          },
         },
       }}
     />
   );
-};
+}

@@ -1,66 +1,52 @@
-// apps/web/src/shared/ui/CustomDatepicker.tsx
 "use client";
 
-import React from "react";
 import { Datepicker } from "baseui/datepicker";
-import { es } from "date-fns/locale"; // Para internacionalizar el calendario en español
+import { es } from "date-fns/locale";
 
-interface CustomDatepickerProps {
-  value: Date | null | (Date | null)[];
-  onChange: (params: { date: Date | null | (Date | null)[] }) => void;
+export interface DatePickerProps {
+  value: Date | null | Array<Date | null | undefined> | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (params: { date: any }) => void;
   placeholder?: string;
+  minDate?: Date;
+  disabled?: boolean;
+  error?: boolean;
 }
 
-export const DatePicker = ({
+export function DatePicker({
   value,
   onChange,
-  placeholder = "Seleccione una fecha",
-}: CustomDatepickerProps) => {
+  placeholder = "dd/mm/aaaa",
+  minDate,
+  disabled,
+  error,
+}: DatePickerProps) {
   return (
     <Datepicker
-      value={value}
-      onChange={onChange}
+      value={value as any}
+      onChange={onChange as any}
       placeholder={placeholder}
-      locale={es} // Aplica los meses y días en español nativo
+      locale={es}
       formatString="dd/MM/yyyy"
+      minDate={minDate}
+      disabled={disabled}
       overrides={{
         Input: {
-          Props: {
+          props: {
+            error,
             overrides: {
               Root: {
-                style: {
+                style: ({ $theme }: { $theme: any }) => ({
                   borderRadius: "8px",
-                  fontFamily: "var(--font-neuton), serif",
-                },
+                  borderColor: error
+                    ? $theme.colors.borderNegative
+                    : undefined,
+                }),
               },
             },
           },
         },
-        CalendarHeader: {
-          style: {
-            fontFamily: "var(--font-neuton), serif",
-          },
-        },
-        MonthYearSelectButton: {
-          style: {
-            fontFamily: "var(--font-neuton), serif",
-          },
-        },
-        Day: {
-          style: ({ $theme, $selected }) => ({
-            fontFamily: "var(--font-neuton), serif",
-            // Si el día está seleccionado, hereda automáticamente el mainColor dinámico
-            backgroundColor: $selected
-              ? $theme.colors.buttonPrimaryFill
-              : undefined,
-            ":hover": {
-              backgroundColor: $selected
-                ? $theme.colors.buttonPrimaryActive
-                : $theme.colors.backgroundSecondary,
-            },
-          }),
-        },
       }}
     />
   );
-};
+}
