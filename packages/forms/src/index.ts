@@ -1,8 +1,9 @@
-// packages/forms/src/index.ts
 export * from "./mapper";
 export * from "./DeclarativeForm";
+export * from "./componentTypes";
+export * from "./ManagedForm";
+export * from "./resolveSchema";
 
-// También exportamos los utilitarios de DDF por conveniencia
 export {
   componentTypes,
   validatorTypes,

@@ -6,11 +6,14 @@ import {
   useFieldApi,
 } from "@data-driven-forms/react-form-renderer";
 import { FormField, Checkbox, Select, DatePicker, Textarea } from "@repo/ui";
-import { FormControl } from "baseui/form-control";
+import { LabeledField } from "@repo/ui";
+import { COMPONENT_TYPES } from "./componentTypes";
+import { FormSectionAdapter } from "./adapters/FormSectionAdapter";
+import { SideBySideAdapter } from "./adapters/SideBySideAdapter";
 
-// Adaptador para Inputs de texto, email, password, etc.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TextFieldAdapter = (props: any) => {
-  const { input, meta, ...rest } = useFieldApi(props);
+  const { input, meta, span: _span, ...rest } = useFieldApi(props);
   return (
     <FormField
       {...input}
@@ -20,25 +23,24 @@ const TextFieldAdapter = (props: any) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TextareaAdapter = (props: any) => {
-  const { input, meta, label, ...rest } = useFieldApi(props);
+  const { input, meta, label, span: _span, rows, ...rest } = useFieldApi(props);
   return (
-    <FormControl
-      label={label}
-      error={meta.touched && meta.error ? meta.error : undefined}
-    >
+    <LabeledField label={label} error={meta.touched && meta.error ? meta.error : undefined}>
       <Textarea
         {...input}
         {...rest}
+        rows={rows}
         error={!!(meta.touched && meta.error)}
       />
-    </FormControl>
+    </LabeledField>
   );
 };
 
-// Adaptador para el Checkbox
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CheckboxAdapter = (props: any) => {
-  const { input, meta, label, ...rest } = useFieldApi({
+  const { input, meta: _meta, label, span: _span, ...rest } = useFieldApi({
     ...props,
     type: "checkbox",
   });
@@ -47,8 +49,8 @@ const CheckboxAdapter = (props: any) => {
     <Checkbox
       checked={!!input.checked}
       onChange={input.onChange}
-      onBlur={input.onBlur as any}
-      onFocus={input.onFocus as any}
+      onBlur={input.onBlur as never}
+      onFocus={input.onFocus as never}
       {...rest}
     >
       {label}
@@ -56,16 +58,14 @@ const CheckboxAdapter = (props: any) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SelectAdapter = (props: any) => {
-  const { input, meta, label, options, ...rest } = useFieldApi(props);
+  const { input, meta, label, options, span: _span, ...rest } = useFieldApi(props);
   const value = input.value
-    ? [{ id: input.value, label: options?.find((o: any) => o.id === input.value)?.label ?? input.value }]
+    ? [{ id: input.value, label: options?.find((o: { id: unknown }) => o.id === input.value)?.label ?? input.value }]
     : [];
   return (
-    <FormControl
-      label={label}
-      error={meta.touched && meta.error ? meta.error : undefined}
-    >
+    <LabeledField label={label} error={meta.touched && meta.error ? meta.error : undefined}>
       <Select
         options={options ?? []}
         value={value}
@@ -73,18 +73,16 @@ const SelectAdapter = (props: any) => {
         error={!!(meta.touched && meta.error)}
         {...rest}
       />
-    </FormControl>
+    </LabeledField>
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DatePickerAdapter = (props: any) => {
-  const { input, meta, label, minDate, ...rest } = useFieldApi(props);
+  const { input, meta, label, minDate, span: _span, ...rest } = useFieldApi(props);
   const dateValue = input.value ? new Date(input.value) : null;
   return (
-    <FormControl
-      label={label}
-      error={meta.touched && meta.error ? meta.error : undefined}
-    >
+    <LabeledField label={label} error={meta.touched && meta.error ? meta.error : undefined}>
       <DatePicker
         value={dateValue}
         onChange={({ date }) => {
@@ -98,15 +96,16 @@ const DatePickerAdapter = (props: any) => {
         error={!!(meta.touched && meta.error)}
         {...rest}
       />
-    </FormControl>
+    </LabeledField>
   );
 };
 
-// El diccionario central que DDF utilizará
 export const componentMapper = {
   [componentTypes.TEXT_FIELD]: TextFieldAdapter,
   [componentTypes.TEXTAREA]: TextareaAdapter,
   [componentTypes.CHECKBOX]: CheckboxAdapter,
   [componentTypes.SELECT]: SelectAdapter,
   [componentTypes.DATE_PICKER]: DatePickerAdapter,
+  [COMPONENT_TYPES.FORM_SECTION]: FormSectionAdapter,
+  [COMPONENT_TYPES.SIDE_BY_SIDE]: SideBySideAdapter,
 };

@@ -1,0 +1,178 @@
+{
+  "fields": [
+    {
+      "component": "form-section",
+      "name": "section-customer",
+      "number": 1,
+      "title": "sectionClient",
+      "icon": "User",
+      "fields": [
+        {
+          "component": "text-field",
+          "name": "customer_name",
+          "label": "fieldCustomerName",
+          "span": 6,
+          "validate": [
+            { "type": "required",   "message": "validationCustomerName" },
+            { "type": "min-length", "message": "validationCustomerName", "threshold": 2 }
+          ]
+        },
+        {
+          "component": "text-field",
+          "name": "customer_phone",
+          "label": "fieldCustomerPhone",
+          "span": 6,
+          "type": "tel"
+        },
+        {
+          "component": "date-picker",
+          "name": "delivery_date",
+          "label": "fieldDeliveryDate",
+          "span": 6,
+          "minDate": "$today",
+          "validate": [
+            { "type": "required",       "message": "validationDeliveryDate" },
+            { "type": "delivery-date",  "message": "validationDeliveryDate" }
+          ]
+        }
+      ]
+    },
+    {
+      "component": "form-section",
+      "name": "section-work",
+      "number": 2,
+      "title": "sectionWork",
+      "icon": "FileText",
+      "fields": [
+        {
+          "component": "select",
+          "name": "product_type",
+          "label": "fieldProductType",
+          "span": 6,
+          "options": [
+            { "id": "Talonario",         "label": "Talonario"         },
+            { "id": "Tarjeta de visita", "label": "Tarjeta de visita" },
+            { "id": "Volante",           "label": "Volante"           },
+            { "id": "Afiche",            "label": "Afiche"            },
+            { "id": "Membrete",          "label": "Membrete"          },
+            { "id": "Otro",              "label": "Otro"              }
+          ]
+        },
+        {
+          "component": "text-field",
+          "name": "quantity",
+          "label": "fieldQuantity",
+          "span": 3,
+          "type": "number"
+        },
+        {
+          "component": "text-field",
+          "name": "size",
+          "label": "fieldSize",
+          "span": 3
+        },
+        {
+          "component": "textarea",
+          "name": "description",
+          "label": "fieldDescription",
+          "span": 12,
+          "rows": 3
+        },
+        {
+          "component": "text-field",
+          "name": "material",
+          "label": "fieldMaterial",
+          "span": 6
+        },
+        {
+          "component": "text-field",
+          "name": "colors",
+          "label": "fieldColors",
+          "span": 6
+        }
+      ]
+    },
+    {
+      "component": "side-by-side",
+      "name": "section-3-4",
+      "fields": [
+        {
+          "component": "form-section",
+          "name": "section-finishing",
+          "number": 3,
+          "title": "finishing",
+          "icon": "Scissors",
+          "fields": [
+            {
+              "component": "finishing-fields",
+              "name": "finishing",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "component": "form-section",
+          "name": "section-operator",
+          "number": 4,
+          "title": "sectionOperator",
+          "icon": "Wrench",
+          "fields": [
+            {
+              "component": "textarea",
+              "name": "operator_notes",
+              "label": "fieldOperatorNotes",
+              "span": 12,
+              "rows": 3
+            },
+            {
+              "component": "textarea",
+              "name": "internal_notes",
+              "label": "fieldInternalNotes",
+              "span": 12,
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "component": "form-section",
+      "name": "section-payment",
+      "number": 5,
+      "title": "sectionPayment",
+      "icon": "CreditCard",
+      "fields": [
+        {
+          "component": "text-field",
+          "name": "price_total",
+          "label": "fieldPriceTotal",
+          "span": 4,
+          "type": "number",
+          "startEnhancer": "$",
+          "validate": [
+            { "type": "price-positive", "message": "validationPriceTotal" }
+          ]
+        },
+        {
+          "component": "payment-status",
+          "name": "payment_status",
+          "label": "sectionPayment",
+          "span": 8
+        },
+        {
+          "component": "text-field",
+          "name": "payment_advance",
+          "label": "fieldPaymentAdvance",
+          "span": 6,
+          "type": "number",
+          "startEnhancer": "$",
+          "clearedValue": null,
+          "condition": { "when": "payment_status", "is": "partial" },
+          "validate": [
+            { "type": "payment-advance", "message": "validationPaymentAdvance" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -10,11 +10,13 @@ interface Props {
   isOpen: boolean;
   orderId: string;
   onClose: () => void;
+  /** Pre-selects the price mode from the header toggle */
+  initialPriceMode?: "with" | "without";
 }
 
-export function PrintConfirmModal({ isOpen, orderId, onClose }: Props) {
+export function PrintConfirmModal({ isOpen, orderId, onClose, initialPriceMode = "with" }: Props) {
   const t = useTranslations("Orders");
-  const [priceMode, setPriceMode] = useState<"with" | "without">("with");
+  const [priceMode, setPriceMode] = useState<"with" | "without">(initialPriceMode);
   const [isPrinting, setIsPrinting] = useState(false);
 
   const order = useOrderStore((state) =>

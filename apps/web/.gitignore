@@ -10,6 +10,7 @@
 docs
 task
 skills-lock.json
+progress
 
 # testing
 /coverage

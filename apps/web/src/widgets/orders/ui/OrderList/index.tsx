@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useTransition, useDeferredValue } from "react";
+import { useState, useTransition, useMemo } from "react";
 import { useStyletron } from "baseui";
 import { HeadingLarge, LabelMedium } from "baseui/typography";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@repo/ui";
 import { useOrderList, OrderFilter } from "@/entities/order/lib/useOrderList";
+import { useTableControls } from "@/shared/lib/useTableControls";
 import { OrderSearchInput } from "./OrderSearchInput";
 import { OrderFilters } from "./OrderFilters";
 import { OrderTable } from "./OrderTable";
+import { getOrderColumns } from "./columns";
 
 export function OrderList() {
   const [css, theme] = useStyletron();
@@ -17,18 +19,26 @@ export function OrderList() {
   const router = useRouter();
   const pathname = usePathname();
   const locale = pathname.split("/")[1];
-
-  const [filter, setFilter] = useState<OrderFilter>("all");
-  const [search, setSearch] = useState("");
   const [, startTransition] = useTransition();
-  const deferredSearch = useDeferredValue(search);
 
-  const { orders } = useOrderList(filter, deferredSearch);
+  // Domain filter (Todas / Entrega hoy / Cobro pendiente / En producción)
+  const [filter, setFilter] = useState<OrderFilter>("all");
+  const { orders } = useOrderList(filter);
 
-  const handleNewOrder = () => router.push(`/${locale}/orders/new`);
+  // TanStack Table controls search, sorting, and pagination over the domain-filtered rows
+  const columns = useMemo(() => getOrderColumns(t), [t]);
+  const { table, globalFilter, setGlobalFilter } = useTableControls({
+    data: orders,
+    columns,
+    initialPageSize: 10,
+  });
+
+  const isFiltered = filter !== "all" || globalFilter !== "";
+  const totalVisible = table.getFilteredRowModel().rows.length;
 
   return (
     <div className={css({ display: "flex", flexDirection: "column", gap: "24px" })}>
+      {/* ── Header ── */}
       <div
         className={css({
           display: "flex",
@@ -48,12 +58,15 @@ export function OrderList() {
               borderRadius: "12px",
             }}
           >
-            {orders.length}
+            {totalVisible}
           </LabelMedium>
         </div>
-        <Button onClick={handleNewOrder}>{t("newOrder")}</Button>
+        <Button onClick={() => router.push(`/${locale}/orders/new`)}>
+          {t("newOrder")}
+        </Button>
       </div>
 
+      {/* ── Search + Filters ── */}
       <div
         className={css({
           display: "flex",
@@ -63,13 +76,14 @@ export function OrderList() {
         })}
       >
         <OrderSearchInput
-          value={search}
-          onChange={(val) => startTransition(() => setSearch(val))}
+          value={globalFilter}
+          onChange={(val) => startTransition(() => setGlobalFilter(val))}
         />
         <OrderFilters active={filter} onChange={setFilter} />
       </div>
 
-      <OrderTable orders={orders} isFiltered={filter !== "all" || search !== ""} />
+      {/* ── Table ── */}
+      <OrderTable table={table} isFiltered={isFiltered} />
     </div>
   );
 }

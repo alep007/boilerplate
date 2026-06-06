@@ -112,6 +112,17 @@
     "worksheetTotal": "Total",
     "priceToggleWith": "With price",
     "priceToggleWithout": "Without price",
-    "backToDetail": "← Back to detail"
+    "backToDetail": "← Back to detail",
+    "sectionSpecs": "Product Specifications",
+    "sectionProductionNotes": "PRODUCTION NOTES",
+    "stageCurrentLabel": "Current Stage: {stage}",
+    "inProgress": "IN PROGRESS",
+    "total": "Total",
+    "paidAmount": "Paid Amount",
+    "pendingBalance": "Pending Balance",
+    "addPayment": "Add Payment Record",
+    "showPrices": "Show Prices",
+    "printWorksheet": "Print Workshop Sheet",
+    "entryDate": "Entry Date"
   }
 }

@@ -4,8 +4,9 @@ import { Order } from "../model/types";
 
 export type OrderFilter = "all" | "today" | "pending_payment" | "in_production";
 
+// Domain/semantic filters — TanStack Table handles text search separately.
 function applyFilter(orders: Order[], filter: OrderFilter): Order[] {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split("T")[0] as string;
   switch (filter) {
     case "today":
       return orders.filter((o) => o.delivery_date === today);
@@ -20,23 +21,8 @@ function applyFilter(orders: Order[], filter: OrderFilter): Order[] {
   }
 }
 
-function applySearch(orders: Order[], search: string): Order[] {
-  if (!search.trim()) return orders;
-  const q = search.toLowerCase();
-  return orders.filter(
-    (o) =>
-      o.customer_name.toLowerCase().includes(q) ||
-      String(o.order_number).includes(q)
-  );
-}
-
-export function useOrderList(filter: OrderFilter, search: string) {
+export function useOrderList(filter: OrderFilter) {
   const orders = useOrderStore((state) => state.orders);
-
-  const filtered = useMemo(() => {
-    const byFilter = applyFilter(orders, filter);
-    return applySearch(byFilter, search);
-  }, [orders, filter, search]);
-
+  const filtered = useMemo(() => applyFilter(orders, filter), [orders, filter]);
   return { orders: filtered, isLoading: false };
 }

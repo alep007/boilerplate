@@ -16,6 +16,7 @@
     "@repo/forms": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.101.0",
+    "@tanstack/react-table": "^8.21.3",
     "baseui": "^16.1.1",
     "date-fns": "^4.4.0",
     "lucide-react": "^1.17.0",

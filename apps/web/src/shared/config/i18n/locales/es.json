@@ -112,6 +112,17 @@
     "worksheetTotal": "Total",
     "priceToggleWith": "Con precio",
     "priceToggleWithout": "Sin precio",
-    "backToDetail": "← Volver al detalle"
+    "backToDetail": "← Volver al detalle",
+    "sectionSpecs": "Especificaciones del Producto",
+    "sectionProductionNotes": "NOTAS DE PRODUCCIÓN",
+    "stageCurrentLabel": "Etapa Actual: {stage}",
+    "inProgress": "EN PROGRESO",
+    "total": "Total",
+    "paidAmount": "Monto Pagado",
+    "pendingBalance": "Saldo Pendiente",
+    "addPayment": "Agregar Registro de Pago",
+    "showPrices": "Mostrar Precios",
+    "printWorksheet": "Imprimir Hoja de Taller",
+    "entryDate": "Fecha de Ingreso"
   }
 }

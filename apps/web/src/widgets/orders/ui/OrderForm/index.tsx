@@ -1,72 +1,97 @@
 "use client";
 
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { DeclarativeForm } from "@repo/forms";
-import { getOrderSchema } from "./orderSchema";
-import { FinishingFields } from "./FinishingFields";
-import { PaymentEditForm } from "../OrderDetail/PaymentEditForm";
-import { Order, OrderFinishing, PaymentStatus } from "@/entities/order/model/types";
-import { useStyletron } from "baseui";
-import { LabelMedium } from "baseui/typography";
+import { ManagedForm, ManagedFormHandle } from "@repo/forms";
+import { Order } from "@/entities/order/model/types";
+import { buildOrderSchema } from "./orderSchema";
+import { FinishingFieldsAdapter } from "./adapters/FinishingFieldsAdapter";
+import { PaymentStatusAdapter } from "./adapters/PaymentStatusAdapter";
 
-interface Props {
+// ── Public types ──────────────────────────────────────────────────────────────
+
+export interface OrderFormValues extends Record<string, unknown> {
+  customer_name: string;
+  customer_phone: string;
+  delivery_date: string;
+  description: string;
+  product_type: string;
+  quantity: string;
+  size: string;
+  material: string;
+  colors: string;
+  operator_notes: string;
+  internal_notes: string;
+  finishing: Order["finishing"];
+  price_total: string;
+  payment_status: Order["payment_status"];
+  payment_advance: string | undefined;
+}
+
+export interface OrderFormHandle {
+  getValues: () => OrderFormValues;
+  validate: () => Promise<boolean>;
+}
+
+interface OrderFormProps {
   initialValues?: Partial<Order>;
   isNew: boolean;
-  finishing: OrderFinishing;
-  onFinishingChange: (v: OrderFinishing) => void;
-  priceTotal: number;
-  paymentStatus: PaymentStatus;
-  paymentAdvance?: number;
-  onPriceTotalChange: (v: number) => void;
-  onPaymentStatusChange: (v: PaymentStatus) => void;
-  onPaymentAdvanceChange: (v: number | undefined) => void;
-  onSubmit: (values: Partial<Order>) => void;
-  paymentErrors?: { price_total?: string; payment_advance?: string };
+  onDirtyChange?: (isDirty: boolean) => void;
 }
 
-export function OrderForm({
-  initialValues,
-  isNew,
-  finishing,
-  onFinishingChange,
-  priceTotal,
-  paymentStatus,
-  paymentAdvance,
-  onPriceTotalChange,
-  onPaymentStatusChange,
-  onPaymentAdvanceChange,
-  onSubmit,
-  paymentErrors,
-}: Props) {
-  const t = useTranslations("Orders");
-  const [css, theme] = useStyletron();
-  const schema = getOrderSchema(t as (key: string) => string, isNew);
+const ORDER_COMPONENT_MAPPER = {
+  "finishing-fields": FinishingFieldsAdapter,
+  "payment-status": PaymentStatusAdapter,
+} as const;
 
-  return (
-    <div className={css({ display: "flex", flexDirection: "column", gap: "24px" })}>
-      <DeclarativeForm
+// ── OrderForm ─────────────────────────────────────────────────────────────────
+
+export const OrderForm = forwardRef<OrderFormHandle, OrderFormProps>(
+  function OrderForm({ initialValues, isNew: _isNew, onDirtyChange }, ref) {
+    const t = useTranslations("Orders");
+    const managedRef = useRef<ManagedFormHandle>(null);
+
+    const schema = useMemo(() => buildOrderSchema((key) => t(key as never)), [t]);
+
+    const dfInitialValues = useMemo<Record<string, unknown>>(
+      () => ({
+        customer_name: initialValues?.customer_name ?? "",
+        customer_phone: initialValues?.customer_phone ?? "",
+        delivery_date: initialValues?.delivery_date ?? "",
+        description: initialValues?.description ?? "",
+        product_type: initialValues?.product_type ?? "",
+        quantity: initialValues?.quantity != null ? String(initialValues.quantity) : "",
+        size: initialValues?.size ?? "",
+        material: initialValues?.material ?? "",
+        colors: initialValues?.colors ?? "",
+        operator_notes: initialValues?.operator_notes ?? "",
+        internal_notes: initialValues?.internal_notes ?? "",
+        finishing: initialValues?.finishing ?? {},
+        price_total: initialValues?.price_total != null ? String(initialValues.price_total) : "",
+        payment_status: initialValues?.payment_status ?? "paid",
+        payment_advance:
+          initialValues?.payment_advance != null
+            ? String(initialValues.payment_advance)
+            : undefined,
+      }),
+      // initialValues identity is stable per render cycle
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      []
+    );
+
+    useImperativeHandle(ref, () => ({
+      getValues: () => (managedRef.current?.getValues() ?? {}) as OrderFormValues,
+      validate: () => managedRef.current?.validate() ?? Promise.resolve(false),
+    }));
+
+    return (
+      <ManagedForm
+        ref={managedRef}
         schema={schema}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onSubmit={onSubmit as any}
-        initialValues={initialValues}
+        initialValues={dfInitialValues}
+        onDirtyChange={onDirtyChange}
+        componentMapper={ORDER_COMPONENT_MAPPER as never}
       />
-
-      <FinishingFields value={finishing} onChange={onFinishingChange} />
-
-      <div className={css({ borderTop: `1px solid ${theme.colors.borderOpaque}`, paddingTop: "24px" })}>
-        <LabelMedium color={theme.colors.contentPrimary} $style={{ marginBottom: "16px" }}>
-          {t("sectionPayment")}
-        </LabelMedium>
-        <PaymentEditForm
-          priceTotal={priceTotal}
-          paymentStatus={paymentStatus}
-          paymentAdvance={paymentAdvance}
-          onPriceTotalChange={onPriceTotalChange}
-          onPaymentStatusChange={onPaymentStatusChange}
-          onPaymentAdvanceChange={onPaymentAdvanceChange}
-          errors={paymentErrors}
-        />
-      </div>
-    </div>
-  );
-}
+    );
+  }
+);
