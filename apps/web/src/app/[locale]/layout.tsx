@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Boilerplate App",
+  title: "INU",
 };
 
 export default async function RootLayout({
@@ -35,7 +35,10 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+    >
       <body style={{ margin: 0, padding: 0 }}>
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
