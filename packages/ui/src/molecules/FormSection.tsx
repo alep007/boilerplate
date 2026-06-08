@@ -93,6 +93,10 @@ export function FormSection({ number, title, icon: Icon, children }: FormSection
           gridTemplateColumns: "repeat(12, 1fr)",
           gap: "16px",
           alignItems: "start",
+          "@media (max-width: 768px)": {
+            padding: "14px",
+            gap: "12px",
+          },
         })}
       >
         {children}

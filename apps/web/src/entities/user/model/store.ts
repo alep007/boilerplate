@@ -1,5 +1,6 @@
 // apps/web/src/entities/user/model/store.ts
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 // 1. Definimos la estructura del usuario
 export interface UserProfile {
@@ -20,13 +21,17 @@ interface UserSessionState {
 }
 
 // 3. Creamos el Hook global de Zustand
-export const useUserStore = create<UserSessionState>((set) => ({
-  user: null,
-  isAuthenticated: false,
-
-  // Acción para establecer el usuario tras el login
-  setUser: (user) => set({ user, isAuthenticated: true }),
-
-  // Acción para limpiar el estado al cerrar sesión
-  clearSession: () => set({ user: null, isAuthenticated: false }),
-}));
+export const useUserStore = create<UserSessionState>()(
+  persist(
+    (set) => ({
+      user: null,
+      isAuthenticated: false,
+      setUser: (user) => set({ user, isAuthenticated: true }),
+      clearSession: () => set({ user: null, isAuthenticated: false }),
+    }),
+    {
+      name: "cl-session",
+      partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
+    }
+  )
+);

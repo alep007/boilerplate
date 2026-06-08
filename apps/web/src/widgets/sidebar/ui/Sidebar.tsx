@@ -6,7 +6,7 @@ import { useStyletron } from "baseui";
 import { LabelLarge, LabelMedium } from "baseui/typography";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronRight, ChevronLeft, Users } from "lucide-react";
+import { ChevronRight, ChevronLeft, Users, X } from "lucide-react";
 
 import { UserProfileMenu } from "./UserProfileMenu";
 import { NAVIGATION_CONFIG } from "@/shared/config/navigation";
@@ -15,7 +15,7 @@ import { useUIStore } from "@/shared/model/uiStore";
 
 export const Sidebar = () => {
   const [css, theme] = useStyletron();
-  const { isSidebarExpanded: isExpanded, toggleSidebar } = useUIStore();
+  const { isSidebarExpanded: isExpanded, toggleSidebar, isMobileMenuOpen, closeMobileMenu } = useUIStore();
 
   const t = useTranslations("Navigation");
   const pathname = usePathname();
@@ -30,9 +30,24 @@ export const Sidebar = () => {
   );
 
   return (
+    <>
+      {/* Mobile backdrop */}
+      <div
+        onClick={closeMobileMenu}
+        className={css({
+          display: "none",
+          "@media (max-width: 768px)": {
+            display: isMobileMenuOpen ? "block" : "none",
+            position: "fixed",
+            inset: "0",
+            backgroundColor: "rgba(0,0,0,0.45)",
+            zIndex: 99,
+          },
+        })}
+      />
     <aside
       className={css({
-        width: isExpanded ? "260px" : "80px", // Animación de ancho
+        width: isExpanded ? "260px" : "80px",
         height: "100vh",
         backgroundColor: theme.colors.backgroundInversePrimary,
         color: theme.colors.contentInversePrimary,
@@ -45,11 +60,16 @@ export const Sidebar = () => {
         left: 0,
         top: 0,
         borderRight: `1px solid ${theme.colors.borderOpaque}`,
-        transition: "width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)", // Transición suave
+        transition: "width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)",
         zIndex: 100,
+        "@media (max-width: 768px)": {
+          width: "260px",
+          transform: isMobileMenuOpen ? "translateX(0)" : "translateX(-100%)",
+          paddingTop: "72px",
+        },
       })}
     >
-      {/* Botón flotante para expandir/colapsar */}
+      {/* Desktop: expand/collapse toggle (hidden on mobile) */}
       <button
         onClick={toggleSidebar}
         className={css({
@@ -68,9 +88,40 @@ export const Sidebar = () => {
           cursor: "pointer",
           zIndex: 10,
           boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+          "@media (max-width: 768px)": {
+            display: "none",
+          },
         })}
       >
         {isExpanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+      </button>
+
+      {/* Mobile: close drawer button (hidden on desktop) */}
+      <button
+        onClick={closeMobileMenu}
+        className={css({
+          display: "none",
+          "@media (max-width: 768px)": {
+            display: "flex",
+            position: "absolute",
+            right: "16px",
+            top: "16px",
+            background: "none",
+            border: "none",
+            padding: "6px",
+            cursor: "pointer",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "6px",
+            color: theme.colors.contentInverseSecondary,
+            ":hover": {
+              backgroundColor: theme.colors.backgroundTertiary,
+            },
+          },
+        })}
+        aria-label="Close navigation menu"
+      >
+        <X size={20} />
       </button>
 
       <div>
@@ -124,9 +175,10 @@ export const Sidebar = () => {
             return (
               <div
                 key={route.id}
-                onClick={() =>
-                  router.push(`/${pathname.split("/")[1]}${route.path}`)
-                } // Respeta el idioma actual
+                onClick={() => {
+                  router.push(`/${pathname.split("/")[1]}${route.path}`);
+                  closeMobileMenu();
+                }}
                 className={css({
                   display: "flex",
                   alignItems: "center",
@@ -197,5 +249,6 @@ export const Sidebar = () => {
         )}
       </div>
     </aside>
+    </>
   );
 };

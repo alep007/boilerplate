@@ -19,6 +19,7 @@ interface Props {
   onCancel: () => void;
   onSave: () => void;
   onPrint: () => void;
+  sticky?: boolean;
 }
 
 export function OrderDetailHeader({
@@ -33,6 +34,7 @@ export function OrderDetailHeader({
   onCancel,
   onSave,
   onPrint,
+  sticky = false,
 }: Props) {
   const [css, theme] = useStyletron();
   const t = useTranslations("Orders");
@@ -54,7 +56,27 @@ export function OrderDetailHeader({
     : "…";
 
   return (
-    <div className={css({ display: "flex", flexDirection: "column", gap: "4px" })}>
+    <div
+      className={css({
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        ...(sticky && {
+          position: "sticky",
+          top: "0",
+          zIndex: 50,
+          backgroundColor: theme.colors.backgroundPrimary,
+          paddingTop: "16px",
+          paddingBottom: "16px",
+          marginTop: "-16px",
+          marginBottom: "-16px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          "@media (max-width: 768px)": {
+            top: "56px",
+          },
+        }),
+      })}
+    >
       {/* ── Breadcrumb ── */}
       <nav className={css({ display: "flex", alignItems: "center", gap: "6px" })}>
         <button
@@ -120,13 +142,24 @@ export function OrderDetailHeader({
             fontFamily: "var(--font-inter), sans-serif",
             letterSpacing: "-0.02em",
             lineHeight: "1.1",
+            "@media (max-width: 768px)": {
+              fontSize: "22px",
+            },
           })}
         >
           {orderTitle}
         </h1>
 
         {/* Actions */}
-        <div className={css({ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" })}>
+        <div className={css({
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          flexWrap: "wrap",
+          "@media (max-width: 768px)": {
+            width: "100%",
+          },
+        })}>
           {isEditing ? (
             <>
               <Button kind="secondary" onClick={onCancel} disabled={isSaving}>

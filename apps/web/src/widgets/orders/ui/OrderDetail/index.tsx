@@ -102,7 +102,8 @@ export function OrderDetail({ mode, id }: Props) {
         display: "flex",
         flexDirection: "column",
         gap: "24px",
-        maxWidth: "1080px",
+        maxWidth: "1400px",
+        width: "100%",
       })}
     >
       {/* ── Page header ── */}
@@ -127,6 +128,7 @@ export function OrderDetail({ mode, id }: Props) {
             setShowPrintModal(true);
           }
         }}
+        sticky
       />
 
       {/* ── Production progress (view mode only, existing orders) ── */}
