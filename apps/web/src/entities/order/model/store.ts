@@ -6,6 +6,7 @@ interface OrderStore {
   orders: Order[];
   addOrder: (data: Omit<Order, "id" | "created_at">) => Order;
   updateOrder: (id: string, patch: Partial<Order>) => void;
+  deleteOrder: (id: string) => void;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -25,6 +26,12 @@ export const useOrderStore = create<OrderStore>((set) => ({
   updateOrder: (id, patch) => {
     set((state) => ({
       orders: state.orders.map((o) => (o.id === id ? { ...o, ...patch } : o)),
+    }));
+  },
+
+  deleteOrder: (id) => {
+    set((state) => ({
+      orders: state.orders.filter((o) => o.id !== id),
     }));
   },
 }));

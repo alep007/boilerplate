@@ -59,8 +59,6 @@ export default function StyletronProvider({
   const dynamicTheme = useMemo(() => {
     if (!mainColor) return baseTheme;
 
-    console.log(mainColor);
-
     return {
       ...baseTheme,
       colors: {

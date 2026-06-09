@@ -45,28 +45,26 @@ export function OrderDetail({ mode, id }: Props) {
     if (!formRef.current) return null;
     setIsSaving(true);
     const v = formRef.current.getValues();
+    const totalFromItems = v.items.reduce(
+      (sum, item) => sum + item.quantity * item.price_unit,
+      0
+    );
     const data: Partial<Order> = {
+      order_type: v.order_type,
+      order_date: v.order_date,
       customer_name: v.customer_name,
       customer_phone: v.customer_phone || undefined,
-      delivery_date: v.delivery_date,
-      description: v.description,
-      product_type: v.product_type || undefined,
-      quantity: v.quantity ? parseInt(v.quantity, 10) : undefined,
-      size: v.size || undefined,
-      material: v.material || undefined,
-      colors: v.colors || undefined,
-      operator_notes: v.operator_notes || undefined,
-      internal_notes: v.internal_notes || undefined,
-      finishing: v.finishing,
-      price_total: parseFloat(v.price_total) || 0,
+      items: v.items,
+      price_total: totalFromItems,
       payment_status: v.payment_status,
-      payment_advance:
-        v.payment_status === "partial" && v.payment_advance
-          ? parseFloat(v.payment_advance)
-          : undefined,
+      payment_advance: v.payment_advance > 0 ? v.payment_advance : undefined,
       production_status: isNew ? "received" : order?.production_status,
       order_number: isNew ? nextNumber : order?.order_number,
       account_id: MOCK_ACCOUNT_ID,
+      // backward compat: derive these from items
+      delivery_date: v.items[0]?.delivery_date ?? v.order_date,
+      description: v.items.map((i) => i.detail).join(", "),
+      finishing: order?.finishing ?? {},
     };
     const result = await save(data);
     setIsSaving(false);
@@ -144,7 +142,11 @@ export function OrderDetail({ mode, id }: Props) {
       {isEditing ? (
         <OrderForm
           ref={formRef}
-          initialValues={isNew ? { delivery_date: "", customer_name: "" } : (order ?? {})}
+          initialValues={
+            isNew
+              ? { order_date: new Date().toISOString().split("T")[0], customer_name: "", finishing: {} }
+              : (order ?? {})
+          }
           isNew={isNew}
           onDirtyChange={setIsDirty}
         />

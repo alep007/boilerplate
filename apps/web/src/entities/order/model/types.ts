@@ -26,6 +26,15 @@ export interface OrderFinishing {
   perforated?: boolean;
 }
 
+export interface OrderItem {
+  id: string;
+  detail: string;
+  description?: string;
+  quantity: number;
+  price_unit: number;
+  delivery_date?: string;
+}
+
 export interface Order {
   id: string;
   order_number: number;
@@ -35,6 +44,7 @@ export interface Order {
   production_status: ProductionStatus;
   customer_name: string;
   customer_phone?: string;
+  customer_email?: string;
   product_type?: string;
   description: string;
   quantity?: number;
@@ -47,6 +57,10 @@ export interface Order {
   price_total: number;
   payment_status: PaymentStatus;
   payment_advance?: number;
+  order_type?: "trabajo" | "entrega" | "cotizacion";
+  delivered_quantity?: number;
+  order_date?: string;
+  items?: OrderItem[];
 }
 
 export const MOCK_ACCOUNT_ID = "mock-account-001";
